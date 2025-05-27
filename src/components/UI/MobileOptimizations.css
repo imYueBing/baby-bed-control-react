@@ -1,0 +1,79 @@
+/* 移动端全局优化 */
+@media (max-width: 768px) {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  /* 主容器优化 */
+  .main-container,
+  .app-container {
+    margin: 0;
+    padding: 8px;
+    width: 100%;
+  }
+}
+
+/* 针对iPhone和类似设备的优化 */
+@media (max-width: 430px) {
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  /* 移除所有容器的不必要边距 */
+  .container,
+  .main,
+  .content {
+    margin: 0 !important;
+    padding: 4px !important;
+  }
+
+  /* 确保视频容器占满可用空间 */
+  .image-container {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* 优化心率显示位置 */
+  .heart-rate-container {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+}
+
+/* 视口单位优化 */
+@media (max-width: 480px) {
+  .video-feed-section {
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    max-width: 100%;
+  }
+}
+
+/* 状态栏适配 */
+@media (max-width: 430px) and (-webkit-min-device-pixel-ratio: 2) {
+  .image-container {
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}

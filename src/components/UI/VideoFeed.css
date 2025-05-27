@@ -1,0 +1,163 @@
+.image-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 60vh;
+  /* 增加到60%视口高度 */
+  max-height: none;
+  min-height: 300px;
+  margin: 0;
+  /* 移除外边距 */
+  padding: 0;
+  /* 移除内边距 */
+}
+
+.baby-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.3s ease;
+}
+
+.baby-image:hover {
+  border-color: #999;
+}
+
+/* 平板设备 */
+@media (max-width: 1024px) {
+  .image-container {
+    height: 60vh;
+    min-height: 400px;
+  }
+}
+
+/* 小平板和大手机 */
+@media (max-width: 768px) {
+  .image-container {
+    height: 70vh;
+    min-height: 450px;
+    max-height: none;
+    margin: 8px 0;
+    /* 减少上下边距 */
+  }
+
+  .baby-image {
+    border-radius: 8px;
+    border-width: 1px;
+  }
+}
+
+/* 普通手机屏幕 */
+@media (max-width: 480px) {
+  .image-container {
+    height: 75vh;
+    /* 大幅增加到75%视口高度 */
+    min-height: 500px;
+    max-height: none;
+    /* 移除最大高度限制 */
+    margin: 4px 0;
+    /* 进一步减少边距 */
+  }
+
+  .baby-image {
+    border-radius: 6px;
+  }
+}
+
+/* iPhone 14 Pro Max 和类似大屏设备 */
+@media (max-width: 430px) and (min-height: 900px) {
+  .image-container {
+    height: 80vh;
+    /* 增加到80%视口高度 */
+    min-height: 600px;
+    max-height: none;
+    margin: 2px 0;
+    /* 最小化边距 */
+  }
+}
+
+/* 小屏手机 */
+@media (max-width: 375px) {
+  .image-container {
+    height: 70vh;
+    /* 增加到70%视口高度 */
+    min-height: 400px;
+    max-height: none;
+  }
+
+  .heart-rate-container {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) and (max-height: 500px) {
+  .image-container {
+    height: 85vh;
+    min-height: 280px;
+    max-height: none;
+  }
+}
+
+/* 移动端全屏优化 */
+@media (max-width: 480px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .image-container {
+    border-radius: 0;
+    /* 移动端去掉圆角，更好利用空间 */
+  }
+
+  .baby-image {
+    border-radius: 4px;
+  }
+}
+
+/* iPhone 13 Mini 和类似小屏设备 */
+@media (max-width: 430px) and (min-height: 800px) {
+  .image-container {
+    height: 75vh;
+    /* 增加到75%视口高度 */
+    min-height: 500px;
+    max-height: none;
+  }
+}
+
+.arrow-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 15px;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 50%;
+  font-size: 24px;
+  transition: background-color 0.3s ease;
+}
+
+.arrow-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.left-arrow {
+  left: 10px;
+}
+
+.right-arrow {
+  right: 10px;
+}

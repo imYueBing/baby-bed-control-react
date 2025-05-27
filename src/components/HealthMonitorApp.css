@@ -1,0 +1,23 @@
+.health-monitor-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  padding: 16px;
+  position: relative;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .health-monitor-container {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .health-monitor-container {
+    padding: 8px;
+  }
+}
