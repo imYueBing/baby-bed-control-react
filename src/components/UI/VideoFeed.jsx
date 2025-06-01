@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import HeartRateDisplay from './HeartRateDisplay'
 import SimpleMjpegStream from './SimpleMjpegStream'
 import StreamDiagnostics from './StreamDiagnostics'
+import { API_ENDPOINTS } from '../../config/api'
 import './VideoFeed.css'
 import './MobileOptimizations.css'
 
 const VideoFeed = ({ heartRate, heartRateColor, alertType }) => {
-  const streamUrl = 'http://192.168.0.92:5000/api/video/stream'
   const [showDiagnostics, setShowDiagnostics] = useState(false)
 
   const handleStreamLoad = () => {
@@ -27,7 +27,8 @@ const VideoFeed = ({ heartRate, heartRateColor, alertType }) => {
   }
 
   const sendBedControlRequest = async direction => {
-    const endpoint = `/api/arduino/bed/${direction}`
+    // 使用相对路径，让Vite代理处理CORS
+    const endpoint = `/api/bed/${direction}`
     console.log(`⬆️ 发送请求到: ${endpoint}`)
     try {
       const response = await fetch(endpoint, {
@@ -88,7 +89,7 @@ const VideoFeed = ({ heartRate, heartRateColor, alertType }) => {
           &lt;
         </button>
         <SimpleMjpegStream
-          streamUrl={streamUrl}
+          streamUrl={API_ENDPOINTS.VIDEO_STREAM}
           fallbackSrc='/assets/baby.png'
           className='baby-image'
           onStreamLoad={handleStreamLoad}
@@ -109,7 +110,9 @@ const VideoFeed = ({ heartRate, heartRateColor, alertType }) => {
       </div>
 
       {/* 诊断工具 - 只在连接失败时显示 */}
-      {showDiagnostics && <StreamDiagnostics streamUrl={streamUrl} />}
+      {showDiagnostics && (
+        <StreamDiagnostics streamUrl={API_ENDPOINTS.VIDEO_STREAM} />
+      )}
     </>
   )
 }
