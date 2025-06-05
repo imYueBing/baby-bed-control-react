@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import HeartRateDisplay from './HeartRateDisplay'
+// import HeartRateMonitor from './HeartRateMonitor'
+// import HeartRateDisplay from './HeartRateDisplay'
 import SimpleMjpegStream from './SimpleMjpegStream'
 import StreamDiagnostics from './StreamDiagnostics'
 import { API_ENDPOINTS } from '../../config/api'
 import './VideoFeed.css'
 import './MobileOptimizations.css'
 
-const VideoFeed = ({ heartRate, heartRateColor, alertType }) => {
+const VideoFeed = () => {
   const [showDiagnostics, setShowDiagnostics] = useState(false)
 
   const handleStreamLoad = () => {
@@ -102,11 +103,8 @@ const VideoFeed = ({ heartRate, heartRateColor, alertType }) => {
         >
           &gt;
         </button>
-        <HeartRateDisplay
-          heartRate={heartRate}
-          heartRateColor={heartRateColor}
-          alertType={alertType}
-        />
+        {/* 心率监测组件暂时注释，方便床铺调试 */}
+        {/* <HeartRateDisplay /> */}
       </div>
 
       {/* 诊断工具 - 只在连接失败时显示 */}
