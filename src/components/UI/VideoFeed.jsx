@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 // import HeartRateMonitor from './HeartRateMonitor'
-// import HeartRateDisplay from './HeartRateDisplay'
+import HeartRateDisplay from './HeartRateDisplay'
 import SimpleMjpegStream from './SimpleMjpegStream'
 import StreamDiagnostics from './StreamDiagnostics'
 import { API_ENDPOINTS } from '../../config/api'
@@ -103,8 +103,8 @@ const VideoFeed = () => {
         >
           &gt;
         </button>
-        {/* 心率监测组件暂时注释，方便床铺调试 */}
-        {/* <HeartRateDisplay /> */}
+        {/* 恢复心率显示组件 */}
+        <HeartRateDisplay />
       </div>
 
       {/* 诊断工具 - 只在连接失败时显示 */}
