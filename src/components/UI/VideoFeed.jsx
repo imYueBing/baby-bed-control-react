@@ -27,24 +27,21 @@ const VideoFeed = () => {
     setShowDiagnostics(true)
   }
 
-  const sendBedControlRequest = async direction => {
+  const sendBedControlRequest = async controlType => {
     // 使用相对路径，让Vite代理处理CORS
-    const endpoint = `/api/bed/${direction}`
-    console.log(`⬆️ 发送请求到: ${endpoint}`)
+    const endpoint = `/api/bed/${controlType}`
+    console.log(`⬆️ 发送床铺控制请求: ${endpoint}`)
     try {
       const response = await fetch(endpoint, {
-        method: 'POST', // 或者 'GET'，根据您的API设计
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-          // 如果需要，可以添加其他头部信息，例如认证token
         }
-        // 如果是POST请求并且需要发送数据，可以添加body:
-        // body: JSON.stringify({ /* 您的数据 */ })
       })
 
       if (!response.ok) {
-        // 处理HTTP错误状态 (例如 4xx, 5xx)
-        const errorData = await response.json().catch(() => ({})) // 尝试解析错误JSON，失败则返回空对象
+        // 处理HTTP错误状态
+        const errorData = await response.json().catch(() => ({}))
         console.error(
           `❌ 请求失败 ${response.status}: ${response.statusText}`,
           errorData
@@ -58,37 +55,57 @@ const VideoFeed = () => {
       }
 
       // 请求成功
-      const data = await response.json().catch(() => ({})) // 尝试解析成功JSON，失败则返回空对象
+      const data = await response.json().catch(() => ({}))
       console.log('✅ 请求成功:', data)
-      // 根据API的响应执行操作，例如显示成功消息
-      // alert(`成功: 床铺已向 ${direction === 'up' ? '上' : '下'} 移动。`);
     } catch (error) {
-      // 处理网络错误或其他fetch API本身的错误
       console.error('❌ 网络或Fetch API错误:', error)
       alert('网络错误: 无法连接到服务器控制床铺。')
     }
   }
 
-  const handleLeftArrowClick = () => {
-    console.log('⬅️ 左箭头点击 (床铺向上)')
-    sendBedControlRequest('up')
+  // 定义四个控制函数
+  const handleLeftUpClick = () => {
+    console.log('⬆️ 左上按钮点击 (左侧床铺向上)')
+    sendBedControlRequest('left_up')
   }
 
-  const handleRightArrowClick = () => {
-    console.log('➡️ 右箭头点击 (床铺向下)')
-    sendBedControlRequest('down')
+  const handleLeftDownClick = () => {
+    console.log('⬇️ 左下按钮点击 (左侧床铺向下)')
+    sendBedControlRequest('left_down')
+  }
+
+  const handleRightUpClick = () => {
+    console.log('⬆️ 右上按钮点击 (右侧床铺向上)')
+    sendBedControlRequest('right_up')
+  }
+
+  const handleRightDownClick = () => {
+    console.log('⬇️ 右下按钮点击 (右侧床铺向下)')
+    sendBedControlRequest('right_down')
   }
 
   return (
     <>
       <div className='image-container'>
-        <button
-          className='arrow-button left-arrow'
-          onClick={handleLeftArrowClick}
-          title='床铺向上'
-        >
-          &lt;
-        </button>
+        {/* 左侧控制按钮 */}
+        <div className='bed-controls left-controls'>
+          <button
+            className='arrow-button up-arrow'
+            onClick={handleLeftUpClick}
+            title='左侧床铺向上'
+          >
+            ↑
+          </button>
+          <button
+            className='arrow-button down-arrow'
+            onClick={handleLeftDownClick}
+            title='左侧床铺向下'
+          >
+            ↓
+          </button>
+        </div>
+
+        {/* 视频流 */}
         <SimpleMjpegStream
           streamUrl={API_ENDPOINTS.VIDEO_STREAM}
           fallbackSrc='/assets/baby.png'
@@ -96,14 +113,26 @@ const VideoFeed = () => {
           onStreamLoad={handleStreamLoad}
           onStreamError={handleStreamError}
         />
-        <button
-          className='arrow-button right-arrow'
-          onClick={handleRightArrowClick}
-          title='床铺向下'
-        >
-          &gt;
-        </button>
-        {/* 恢复心率显示组件 */}
+
+        {/* 右侧控制按钮 */}
+        <div className='bed-controls right-controls'>
+          <button
+            className='arrow-button up-arrow'
+            onClick={handleRightUpClick}
+            title='右侧床铺向上'
+          >
+            ↑
+          </button>
+          <button
+            className='arrow-button down-arrow'
+            onClick={handleRightDownClick}
+            title='右侧床铺向下'
+          >
+            ↓
+          </button>
+        </div>
+
+        {/* 心率显示组件 */}
         <HeartRateDisplay />
       </div>
 
