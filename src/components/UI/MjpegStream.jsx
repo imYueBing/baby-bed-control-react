@@ -17,7 +17,7 @@ const MjpegStream = ({
   const retryTimeoutRef = useRef(null)
 
   const generateStreamUrl = baseUrl => {
-    // 添加时间戳和随机参数确保无缓存实时播放
+    // Add timestamp and random parameters to ensure no-cache real-time playback
     const timestamp = Date.now()
     const random = Math.random().toString(36).substring(2)
     const separator = baseUrl.includes('?') ? '&' : '?'
@@ -29,18 +29,18 @@ const MjpegStream = ({
     setHasError(false)
     setRetryCount(0)
     if (onStreamLoad) onStreamLoad()
-    console.log('实时视频流连接成功')
+    console.log('Live video stream connected successfully')
   }
 
   const handleError = e => {
-    console.error('MJPEG流错误:', e)
+    console.error('MJPEG stream error:', e)
     setIsLoading(false)
 
     if (retryCount < maxRetries) {
       setRetryCount(prev => prev + 1)
-      console.log(`正在重试连接... (${retryCount + 1}/${maxRetries})`)
+      console.log(`Retrying connection... (${retryCount + 1}/${maxRetries})`)
 
-      // 重试时使用新的无缓存URL
+      // Use new no-cache URL when retrying
       retryTimeoutRef.current = setTimeout(() => {
         if (imgRef.current) {
           imgRef.current.src = generateStreamUrl(streamUrl)
@@ -49,8 +49,8 @@ const MjpegStream = ({
       }, retryInterval)
     } else {
       setHasError(true)
-      console.log('视频流连接失败，切换到备用图片')
-      // 回退到静态图片
+      console.log('Video stream connection failed, switching to fallback image')
+      // Fall back to static image
       if (imgRef.current && fallbackSrc) {
         imgRef.current.src = fallbackSrc
       }
@@ -59,12 +59,12 @@ const MjpegStream = ({
   }
 
   useEffect(() => {
-    // 初始化实时流
+    // Initialize live stream
     if (imgRef.current) {
       imgRef.current.src = generateStreamUrl(streamUrl)
     }
 
-    // 清理定时器
+    // Clean up timers
     return () => {
       if (retryTimeoutRef.current) {
         clearTimeout(retryTimeoutRef.current)
@@ -92,8 +92,8 @@ const MjpegStream = ({
           }}
         >
           {retryCount > 0
-            ? `正在重新连接... (${retryCount}/${maxRetries})`
-            : '正在加载实时流...'}
+            ? `Reconnecting... (${retryCount}/${maxRetries})`
+            : 'Loading live stream...'}
         </div>
       )}
 
@@ -114,15 +114,15 @@ const MjpegStream = ({
             fontWeight: '500'
           }}
         >
-          实时流不可用
+          Live stream unavailable
           <br />
-          <small>已切换到备用图片</small>
+          <small>Switched to fallback image</small>
         </div>
       )}
 
       <img
         ref={imgRef}
-        alt='婴儿监控实时视频流'
+        alt='Baby monitor live video stream'
         className={className}
         onLoad={handleLoad}
         onError={handleError}
@@ -131,12 +131,12 @@ const MjpegStream = ({
           height: '100%',
           objectFit: 'cover',
           display: 'block',
-          // 禁用所有缓存以确保实时性
+          // Disable all caching to ensure real-time streaming
           imageRendering: 'auto',
-          // 强制重新加载
+          // Force reload
           filter: 'none'
         }}
-        // 添加属性确保无缓存
+        // Add attributes to ensure no-cache
         crossOrigin='anonymous'
       />
     </div>

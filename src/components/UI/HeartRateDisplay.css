@@ -100,3 +100,34 @@
     font-size: 12px;
   }
 }
+
+.data-source-toggle {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.toggle-button {
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.toggle-button.mock {
+  background-color: #ffcc80;
+  color: #333;
+}
+
+.toggle-button.real {
+  background-color: #81c784;
+  color: #333;
+}
+
+.toggle-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}

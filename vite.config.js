@@ -8,7 +8,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     proxy: {
-      // 代理API请求到后端服务器
+      // Proxy API requests to backend server
       '/api': {
         target: 'http://192.168.0.92:5000',
         changeOrigin: true,

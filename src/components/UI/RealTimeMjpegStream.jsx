@@ -7,18 +7,18 @@ const RealTimeMjpegStream = ({
   style = {},
   onStreamLoad,
   onStreamError,
-  refreshRate = 100 // 刷新率：毫秒
+  refreshRate = 100 // Refresh rate: milliseconds
 }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
-  const [connectionStatus, setConnectionStatus] = useState('连接中...')
+  const [connectionStatus, setConnectionStatus] = useState('Connecting...')
   const canvasRef = useRef(null)
   const imgRef = useRef(null)
   const streamRef = useRef(null)
   const intervalRef = useRef(null)
 
   const generateRealTimeUrl = useCallback(() => {
-    // 生成真正的实时URL，每次都不同
+    // Generate real-time URL with unique parameters each time
     const timestamp = Date.now()
     const random = Math.random().toString(36).substring(2, 15)
     const separator = streamUrl.includes('?') ? '&' : '?'
@@ -29,7 +29,7 @@ const RealTimeMjpegStream = ({
     try {
       const url = generateRealTimeUrl()
 
-      // 创建新的图片对象来加载最新帧
+      // Create new image object to load the latest frame
       const img = new Image()
       img.crossOrigin = 'anonymous'
 
@@ -38,45 +38,45 @@ const RealTimeMjpegStream = ({
           const canvas = canvasRef.current
           const ctx = canvas.getContext('2d')
 
-          // 设置canvas尺寸与容器匹配
+          // Set canvas dimensions to match container
           const container = imgRef.current.parentElement
           if (container) {
             canvas.width = container.clientWidth
             canvas.height = container.clientHeight
 
-            // 绘制最新帧
+            // Draw the latest frame
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
           }
         }
 
         if (isLoading) {
           setIsLoading(false)
-          setConnectionStatus('实时连接正常')
+          setConnectionStatus('Real-time connection normal')
           if (onStreamLoad) onStreamLoad()
         }
       }
 
       img.onerror = () => {
-        throw new Error('帧加载失败')
+        throw new Error('Frame loading failed')
       }
 
       img.src = url
     } catch (error) {
-      console.error('实时帧加载错误:', error)
-      setConnectionStatus('连接异常，重试中...')
+      console.error('Real-time frame loading error:', error)
+      setConnectionStatus('Connection error, retrying...')
     }
   }, [generateRealTimeUrl, isLoading, onStreamLoad])
 
   const startRealTimeStream = useCallback(() => {
-    console.log('启动实时视频流...')
+    console.log('Starting real-time video stream...')
     setIsLoading(true)
     setHasError(false)
-    setConnectionStatus('初始化实时流...')
+    setConnectionStatus('Initializing real-time stream...')
 
-    // 立即加载第一帧
+    // Load the first frame immediately
     loadFrame()
 
-    // 设置定时刷新实现真正实时播放
+    // Set refresh interval for true real-time playback
     intervalRef.current = setInterval(() => {
       loadFrame()
     }, refreshRate)
@@ -91,7 +91,7 @@ const RealTimeMjpegStream = ({
 
   const handleFallback = useCallback(() => {
     setHasError(true)
-    setConnectionStatus('使用备用图片')
+    setConnectionStatus('Using fallback image')
     stopRealTimeStream()
 
     if (imgRef.current && fallbackSrc) {
@@ -102,19 +102,19 @@ const RealTimeMjpegStream = ({
       canvasRef.current.style.display = 'none'
     }
 
-    if (onStreamError) onStreamError(new Error('实时流不可用'))
+    if (onStreamError) onStreamError(new Error('Real-time stream unavailable'))
   }, [fallbackSrc, onStreamError, stopRealTimeStream])
 
   useEffect(() => {
-    // 延迟启动以避免初始加载问题
+    // Delayed start to avoid initial loading issues
     const startTimer = setTimeout(() => {
       startRealTimeStream()
     }, 500)
 
-    // 监听错误并在5秒后回退
+    // Monitor for errors and fall back after 5 seconds
     const errorTimer = setTimeout(() => {
       if (isLoading) {
-        console.log('实时流启动超时，切换到备用方案')
+        console.log('Real-time stream startup timeout, switching to fallback')
         handleFallback()
       }
     }, 8000)
@@ -134,7 +134,7 @@ const RealTimeMjpegStream = ({
 
   return (
     <div style={{ position: 'relative', ...style }}>
-      {/* 状态指示器 */}
+      {/* Status indicator */}
       <div
         style={{
           position: 'absolute',
@@ -156,7 +156,7 @@ const RealTimeMjpegStream = ({
         {isLoading ? '🔄' : hasError ? '⚠️' : '🔴'} {connectionStatus}
       </div>
 
-      {/* 加载提示 */}
+      {/* Loading indicator */}
       {isLoading && (
         <div
           style={{
@@ -175,14 +175,14 @@ const RealTimeMjpegStream = ({
           }}
         >
           <div style={{ marginBottom: '10px' }}>🎥</div>
-          正在启动实时视频流...
+          Starting real-time video stream...
           <div style={{ fontSize: '12px', marginTop: '8px', opacity: 0.8 }}>
-            刷新率: {1000 / refreshRate}fps
+            Refresh rate: {1000 / refreshRate}fps
           </div>
         </div>
       )}
 
-      {/* Canvas用于实时帧渲染 */}
+      {/* Canvas for real-time frame rendering */}
       <canvas
         ref={canvasRef}
         className={className}
@@ -195,10 +195,10 @@ const RealTimeMjpegStream = ({
         }}
       />
 
-      {/* 备用图片 */}
+      {/* Fallback image */}
       <img
         ref={imgRef}
-        alt='婴儿监控备用图片'
+        alt='Baby monitor fallback image'
         className={className}
         style={{
           width: '100%',

@@ -1,4 +1,4 @@
-/* 移动端全局优化 */
+/* Mobile global optimizations */
 @media (max-width: 768px) {
   * {
     box-sizing: border-box;
@@ -20,7 +20,7 @@
     min-height: 100vh;
   }
 
-  /* 主容器优化 */
+  /* Main container optimization */
   .main-container,
   .app-container {
     margin: 0;
@@ -29,14 +29,14 @@
   }
 }
 
-/* 针对iPhone和类似设备的优化 */
+/* Optimization for iPhone and similar devices */
 @media (max-width: 430px) {
   body {
     padding: 0;
     margin: 0;
   }
 
-  /* 移除所有容器的不必要边距 */
+  /* Remove unnecessary margins from all containers */
   .container,
   .main,
   .content {
@@ -44,13 +44,13 @@
     padding: 4px !important;
   }
 
-  /* 确保视频容器占满可用空间 */
+  /* Ensure video container fills available space */
   .image-container {
     width: 100% !important;
     margin: 0 !important;
   }
 
-  /* 优化心率显示位置 */
+  /* Optimize heart rate display position */
   .heart-rate-container {
     position: absolute;
     bottom: 10px;
@@ -60,7 +60,7 @@
   }
 }
 
-/* 视口单位优化 */
+/* Viewport unit optimization */
 @media (max-width: 480px) {
   .video-feed-section {
     padding: 0;
@@ -70,7 +70,7 @@
   }
 }
 
-/* 状态栏适配 */
+/* Status bar adaptation */
 @media (max-width: 430px) and (-webkit-min-device-pixel-ratio: 2) {
   .image-container {
     padding-top: env(safe-area-inset-top, 0);

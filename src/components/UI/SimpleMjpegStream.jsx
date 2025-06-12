@@ -10,44 +10,46 @@ const SimpleMjpegStream = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
-  const [connectionStatus, setConnectionStatus] = useState('连接中...')
+  const [connectionStatus, setConnectionStatus] = useState('Connecting...')
   const [retryCount, setRetryCount] = useState(0)
   const imgRef = useRef(null)
   const retryTimeoutRef = useRef(null)
   const maxRetries = 3
 
   const handleLoad = () => {
-    console.log('✅ MJPEG流连接成功')
+    console.log('✅ MJPEG stream connected successfully')
     setIsLoading(false)
     setHasError(false)
     setRetryCount(0)
-    setConnectionStatus('实时流正常')
+    setConnectionStatus('Live stream normal')
     if (onStreamLoad) onStreamLoad()
   }
 
   const handleError = e => {
-    console.error('❌ MJPEG流加载失败:', e)
+    console.error('❌ MJPEG stream loading failed:', e)
     setIsLoading(false)
 
     if (retryCount < maxRetries) {
       const nextRetry = retryCount + 1
       setRetryCount(nextRetry)
-      setConnectionStatus(`重连中... (${nextRetry}/${maxRetries})`)
+      setConnectionStatus(`Reconnecting... (${nextRetry}/${maxRetries})`)
 
-      // 等待2秒后重试
+      // Wait 2 seconds before retrying
       retryTimeoutRef.current = setTimeout(() => {
-        console.log(`🔄 第${nextRetry}次重连尝试...`)
+        console.log(`🔄 Retry attempt ${nextRetry}...`)
         if (imgRef.current) {
-          // 简单地重新设置src，不添加额外参数
+          // Simply reset the src without adding extra parameters
           imgRef.current.src = streamUrl
           setIsLoading(true)
-          setConnectionStatus('重新连接中...')
+          setConnectionStatus('Reconnecting...')
         }
       }, 2000)
     } else {
-      console.log('❌ 达到最大重试次数，切换到备用图片')
+      console.log(
+        '❌ Maximum retry attempts reached, switching to fallback image'
+      )
       setHasError(true)
-      setConnectionStatus('使用备用图片')
+      setConnectionStatus('Using fallback image')
       if (imgRef.current && fallbackSrc) {
         imgRef.current.src = fallbackSrc
       }
@@ -57,7 +59,7 @@ const SimpleMjpegStream = ({
 
   useEffect(() => {
     if (imgRef.current) {
-      console.log('🚀 初始化MJPEG流:', streamUrl)
+      console.log('🚀 Initializing MJPEG stream:', streamUrl)
       imgRef.current.src = streamUrl
     }
 
@@ -70,7 +72,7 @@ const SimpleMjpegStream = ({
 
   return (
     <div style={{ position: 'relative', ...style }}>
-      {/* 连接状态指示器 */}
+      {/* Connection status indicator */}
       <div
         style={{
           position: 'absolute',
@@ -93,7 +95,7 @@ const SimpleMjpegStream = ({
         {isLoading ? '🔄' : hasError ? '⚠️' : '🔴'} {connectionStatus}
       </div>
 
-      {/* 加载提示 */}
+      {/* Loading indicator */}
       {isLoading && (
         <div
           style={{
@@ -113,18 +115,18 @@ const SimpleMjpegStream = ({
         >
           <div style={{ marginBottom: '10px' }}>📡</div>
           {retryCount > 0
-            ? `正在重连... (${retryCount}/${maxRetries})`
-            : '正在连接实时流...'}
+            ? `Reconnecting... (${retryCount}/${maxRetries})`
+            : 'Connecting to live stream...'}
           <div style={{ fontSize: '12px', marginTop: '8px', opacity: 0.8 }}>
-            请稍候片刻
+            Please wait a moment
           </div>
         </div>
       )}
 
-      {/* MJPEG流图片 */}
+      {/* MJPEG stream image */}
       <img
         ref={imgRef}
-        alt='婴儿监控实时流'
+        alt='Baby monitor live stream'
         className={className}
         onLoad={handleLoad}
         onError={handleError}
@@ -137,7 +139,7 @@ const SimpleMjpegStream = ({
         }}
       />
 
-      {/* 调试信息 */}
+      {/* Debug info */}
       {process.env.NODE_ENV === 'development' && (
         <div
           style={{
@@ -152,7 +154,7 @@ const SimpleMjpegStream = ({
             zIndex: 2
           }}
         >
-          重试: {retryCount}/{maxRetries}
+          Retries: {retryCount}/{maxRetries}
         </div>
       )}
     </div>

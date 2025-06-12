@@ -1,10 +1,14 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useHeartRate } from '../../hooks/useHeartRate'
 import { HEART_RATE_THRESHOLDS } from '../../constants/health'
 import './HeartRateDisplay.css'
 
 const HeartRateDisplay = ({ heartRateColor }) => {
-  const { heartRate, timestamp, status } = useHeartRate()
+  const [preferRealData, setPreferRealData] = useState(false)
+  const { heartRate, timestamp, status, isMockData } = useHeartRate(
+    3000,
+    preferRealData
+  )
   const heartIconRef = useRef(null)
 
   useEffect(() => {
@@ -27,6 +31,10 @@ const HeartRateDisplay = ({ heartRateColor }) => {
     heartRate <= HEART_RATE_THRESHOLDS.MAX_NORMAL
 
   const displayColor = heartRateColor || (isNormal ? '#4CAF50' : '#F44336')
+
+  const toggleDataSource = () => {
+    setPreferRealData(!preferRealData)
+  }
 
   return (
     <div className='heart-rate-container'>
@@ -55,6 +63,17 @@ const HeartRateDisplay = ({ heartRateColor }) => {
         {timestamp && (
           <small>Time: {new Date(timestamp).toLocaleTimeString()}</small>
         )}
+      </div>
+
+      <div className='data-source-toggle'>
+        <button
+          onClick={toggleDataSource}
+          className={`toggle-button ${isMockData ? 'mock' : 'real'}`}
+        >
+          {isMockData
+            ? 'Current: Mock Data (Click to try real data)'
+            : 'Current: Real Data (Click to switch to mock)'}
+        </button>
       </div>
     </div>
   )

@@ -8,51 +8,51 @@ import HeartRateAlertSound from './Sound/HeartRateAlertSound'
 import './HealthMonitorApp.css'
 
 const HealthMonitorApp = () => {
-  // 使用真实的WebSocket心率数据
+  // Use real WebSocket heart rate data
   const { heartRate, timestamp, status } = useHeartRate()
 
-  // 状态管理
+  // State management
   const [isAlert, setIsAlert] = useState(false)
   const [alertType, setAlertType] = useState(ALERT_TYPES.NORMAL)
   const [heartRateColor, setHeartRateColor] = useState('#4CAF50')
 
-  // 根据心率数据更新警报状态
+  // Update alert status based on heart rate data
   useEffect(() => {
     if (heartRate === null) {
       setIsAlert(false)
       setAlertType(ALERT_TYPES.NORMAL)
-      setHeartRateColor('#999') // 灰色表示无数据
+      setHeartRateColor('#999') // Gray indicates no data
       return
     }
 
-    // 判断心率是否异常
+    // Determine if heart rate is abnormal
     let newAlertType = ALERT_TYPES.NORMAL
     let newIsAlert = false
-    let newColor = '#4CAF50' // 绿色表示正常
+    let newColor = '#4CAF50' // Green indicates normal
 
     if (heartRate < HEART_RATE_THRESHOLDS.MIN_NORMAL) {
       newAlertType = ALERT_TYPES.LOW_HEART_RATE
       newIsAlert = true
-      newColor = '#F44336' // 红色表示异常
+      newColor = '#F44336' // Red indicates abnormal
     } else if (heartRate > HEART_RATE_THRESHOLDS.MAX_NORMAL) {
       newAlertType = ALERT_TYPES.HIGH_HEART_RATE
       newIsAlert = true
-      newColor = '#F44336' // 红色表示异常
+      newColor = '#F44336' // Red indicates abnormal
     }
 
     setAlertType(newAlertType)
     setIsAlert(newIsAlert)
     setHeartRateColor(newColor)
 
-    // 在控制台显示心率状态
+    // Display heart rate status in console
     if (newIsAlert) {
       console.log(
-        `⚠️ 心率异常: ${heartRate} BPM (${
-          newAlertType === ALERT_TYPES.LOW_HEART_RATE ? '过低' : '过高'
+        `⚠️ Abnormal heart rate: ${heartRate} BPM (${
+          newAlertType === ALERT_TYPES.LOW_HEART_RATE ? 'too low' : 'too high'
         })`
       )
     } else {
-      console.log(`✅ 心率正常: ${heartRate} BPM`)
+      console.log(`✅ Normal heart rate: ${heartRate} BPM`)
     }
   }, [heartRate])
 

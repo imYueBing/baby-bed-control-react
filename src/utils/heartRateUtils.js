@@ -1,11 +1,11 @@
 import { HEART_RATE_THRESHOLDS } from '../constants/health'
 
-// 生成随机心率数据 (模拟数据)
+// Generate random heart rate data (mock data)
 export const generateRandomHeartRate = () => {
   return Math.floor(Math.random() * (180 - 40 + 1)) + 40
 }
 
-// 检查心率是否异常
+// Check if heart rate is abnormal
 export const isHeartRateAbnormal = heartRate => {
   return (
     heartRate < HEART_RATE_THRESHOLDS.MIN_NORMAL ||
@@ -13,7 +13,7 @@ export const isHeartRateAbnormal = heartRate => {
   )
 }
 
-// 获取心率颜色 (根据心率状态)
+// Get heart rate color (based on heart rate status)
 export const getHeartRateColor = heartRate => {
   return isHeartRateAbnormal(heartRate) ? 'red' : 'green'
 }

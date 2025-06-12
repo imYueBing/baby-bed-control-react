@@ -11,26 +11,26 @@ const VideoFeed = () => {
   const [showDiagnostics, setShowDiagnostics] = useState(false)
 
   const handleStreamLoad = () => {
-    console.log('✅ 视频流连接成功！')
-    // 连接成功后隐藏诊断工具
+    console.log('✅ Video stream connected successfully!')
+    // Hide diagnostics tool after successful connection
     setShowDiagnostics(false)
   }
 
   const handleStreamError = error => {
-    console.error('❌ 视频流连接失败:', error)
-    console.log('💡 请检查：')
-    console.log('   1. 摄像头服务器是否运行在 192.168.0.92:5000')
-    console.log('   2. 网络连接是否正常')
-    console.log('   3. 防火墙是否阻止了连接')
+    console.error('❌ Video stream connection failed:', error)
+    console.log('💡 Please check:')
+    console.log('   1. Camera server is running on 192.168.0.92:5000')
+    console.log('   2. Network connection is normal')
+    console.log('   3. Firewall is not blocking the connection')
 
-    // 连接失败时显示诊断工具
+    // Show diagnostics tool when connection fails
     setShowDiagnostics(true)
   }
 
   const sendBedControlRequest = async controlType => {
-    // 使用相对路径，让Vite代理处理CORS
+    // Use relative path to let Vite proxy handle CORS
     const endpoint = `/api/bed/${controlType}`
-    console.log(`⬆️ 发送床铺控制请求: ${endpoint}`)
+    console.log(`⬆️ Sending bed control request: ${endpoint}`)
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -40,72 +40,72 @@ const VideoFeed = () => {
       })
 
       if (!response.ok) {
-        // 处理HTTP错误状态
+        // Handle HTTP error status
         const errorData = await response.json().catch(() => ({}))
         console.error(
-          `❌ 请求失败 ${response.status}: ${response.statusText}`,
+          `❌ Request failed ${response.status}: ${response.statusText}`,
           errorData
         )
         alert(
-          `错误: 未能控制床铺 (${response.status} - ${
+          `Error: Failed to control bed (${response.status} - ${
             errorData.message || response.statusText
           })`
         )
         return
       }
 
-      // 请求成功
+      // Request successful
       const data = await response.json().catch(() => ({}))
-      console.log('✅ 请求成功:', data)
+      console.log('✅ Request successful:', data)
     } catch (error) {
-      console.error('❌ 网络或Fetch API错误:', error)
-      alert('网络错误: 无法连接到服务器控制床铺。')
+      console.error('❌ Network or Fetch API error:', error)
+      alert('Network error: Unable to connect to server to control bed.')
     }
   }
 
-  // 定义四个控制函数
+  // Define four control functions
   const handleLeftUpClick = () => {
-    console.log('⬆️ 左上按钮点击 (左侧床铺向上)')
+    console.log('⬆️ Left up button clicked (left side of bed up)')
     sendBedControlRequest('left_up')
   }
 
   const handleLeftDownClick = () => {
-    console.log('⬇️ 左下按钮点击 (左侧床铺向下)')
+    console.log('⬇️ Left down button clicked (left side of bed down)')
     sendBedControlRequest('left_down')
   }
 
   const handleRightUpClick = () => {
-    console.log('⬆️ 右上按钮点击 (右侧床铺向上)')
+    console.log('⬆️ Right up button clicked (right side of bed up)')
     sendBedControlRequest('right_up')
   }
 
   const handleRightDownClick = () => {
-    console.log('⬇️ 右下按钮点击 (右侧床铺向下)')
+    console.log('⬇️ Right down button clicked (right side of bed down)')
     sendBedControlRequest('right_down')
   }
 
   return (
     <>
       <div className='image-container'>
-        {/* 左侧控制按钮 */}
+        {/* Left control buttons */}
         <div className='bed-controls left-controls'>
           <button
             className='arrow-button up-arrow'
             onClick={handleLeftUpClick}
-            title='左侧床铺向上'
+            title='Left side of bed up'
           >
             ↑
           </button>
           <button
             className='arrow-button down-arrow'
             onClick={handleLeftDownClick}
-            title='左侧床铺向下'
+            title='Left side of bed down'
           >
             ↓
           </button>
         </div>
 
-        {/* 视频流 */}
+        {/* Video stream */}
         <SimpleMjpegStream
           streamUrl={API_ENDPOINTS.VIDEO_STREAM}
           fallbackSrc='/assets/baby.png'
@@ -114,29 +114,29 @@ const VideoFeed = () => {
           onStreamError={handleStreamError}
         />
 
-        {/* 右侧控制按钮 */}
+        {/* Right control buttons */}
         <div className='bed-controls right-controls'>
           <button
             className='arrow-button up-arrow'
             onClick={handleRightUpClick}
-            title='右侧床铺向上'
+            title='Right side of bed up'
           >
             ↑
           </button>
           <button
             className='arrow-button down-arrow'
             onClick={handleRightDownClick}
-            title='右侧床铺向下'
+            title='Right side of bed down'
           >
             ↓
           </button>
         </div>
 
-        {/* 心率显示组件 */}
+        {/* Heart rate display component */}
         <HeartRateDisplay />
       </div>
 
-      {/* 诊断工具 - 只在连接失败时显示 */}
+      {/* Diagnostics tool - only shown when connection fails */}
       {showDiagnostics && (
         <StreamDiagnostics streamUrl={API_ENDPOINTS.VIDEO_STREAM} />
       )}

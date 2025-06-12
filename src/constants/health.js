@@ -1,13 +1,13 @@
-// 心率阈值常量
+// Heart rate threshold constants
 export const HEART_RATE_THRESHOLDS = {
-  MIN_NORMAL: 60, // 正常心率下限
-  MAX_NORMAL: 120 // 正常心率上限
+  MIN_NORMAL: 60, // Minimum normal heart rate
+  MAX_NORMAL: 120 // Maximum normal heart rate
 }
 
-// 心率更新时间间隔 (毫秒)
+// Heart rate update interval (milliseconds)
 export const HEART_RATE_UPDATE_INTERVAL = 3000
 
-// 震动模式配置 (Web API 适配)
+// Vibration pattern configuration (Web API compatible)
 export const VIBRATION_PATTERNS = {
   // Web vibration pattern (shorter to conserve battery)
   WEB: [500, 200, 500],

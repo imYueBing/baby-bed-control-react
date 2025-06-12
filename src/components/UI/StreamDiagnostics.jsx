@@ -10,21 +10,24 @@ const StreamDiagnostics = ({ streamUrl }) => {
 
     const results = {}
 
-    // 测试1: 基本网络连接
-    console.log('🔍 开始诊断网络连接...')
+    // Test 1: Basic network connection
+    console.log('🔍 Starting network connection diagnostics...')
     try {
       const baseUrl = streamUrl.split('/api')[0]
       const response = await fetch(baseUrl, { method: 'HEAD', mode: 'no-cors' })
-      results.networkConnection = { status: 'success', message: '网络连接正常' }
+      results.networkConnection = {
+        status: 'success',
+        message: 'Network connection normal'
+      }
     } catch (error) {
       results.networkConnection = {
         status: 'error',
-        message: `网络连接失败: ${error.message}`
+        message: `Network connection failed: ${error.message}`
       }
     }
 
-    // 测试2: 流地址可访问性
-    console.log('🔍 测试流地址可访问性...')
+    // Test 2: Stream URL accessibility
+    console.log('🔍 Testing stream URL accessibility...')
     try {
       const img = new Image()
       img.crossOrigin = 'anonymous'
@@ -32,34 +35,40 @@ const StreamDiagnostics = ({ streamUrl }) => {
       const loadPromise = new Promise((resolve, reject) => {
         img.onload = () => resolve('success')
         img.onerror = e => reject(e)
-        setTimeout(() => reject(new Error('超时')), 10000)
+        setTimeout(() => reject(new Error('Timeout')), 10000)
       })
 
       img.src = streamUrl
       await loadPromise
-      results.streamAccess = { status: 'success', message: 'MJPEG流可以访问' }
+      results.streamAccess = {
+        status: 'success',
+        message: 'MJPEG stream accessible'
+      }
     } catch (error) {
       results.streamAccess = {
         status: 'error',
-        message: `流访问失败: ${error.message}`
+        message: `Stream access failed: ${error.message}`
       }
     }
 
-    // 测试3: CORS检查
-    console.log('🔍 检查CORS配置...')
+    // Test 3: CORS check
+    console.log('🔍 Checking CORS configuration...')
     try {
       const response = await fetch(streamUrl, { method: 'HEAD' })
-      results.corsCheck = { status: 'success', message: 'CORS配置正确' }
+      results.corsCheck = {
+        status: 'success',
+        message: 'CORS configuration correct'
+      }
     } catch (error) {
       if (error.message.includes('CORS')) {
         results.corsCheck = {
           status: 'warning',
-          message: 'CORS限制，但流可能仍可工作'
+          message: 'CORS restriction, but stream may still work'
         }
       } else {
         results.corsCheck = {
           status: 'error',
-          message: `CORS检查失败: ${error.message}`
+          message: `CORS check failed: ${error.message}`
         }
       }
     }
@@ -110,7 +119,7 @@ const StreamDiagnostics = ({ streamUrl }) => {
       }}
     >
       <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
-        🔧 流连接诊断
+        🔧 Stream Connection Diagnostics
       </h4>
 
       <button
@@ -128,7 +137,7 @@ const StreamDiagnostics = ({ streamUrl }) => {
           marginBottom: '12px'
         }}
       >
-        {isLoading ? '诊断中...' : '开始诊断'}
+        {isLoading ? 'Diagnosing...' : 'Start Diagnostics'}
       </button>
 
       {Object.keys(testResults).length > 0 && (
@@ -136,7 +145,7 @@ const StreamDiagnostics = ({ streamUrl }) => {
           <div
             style={{ fontSize: '12px', fontWeight: '600', marginBottom: '8px' }}
           >
-            诊断结果:
+            Diagnostic Results:
           </div>
 
           {Object.entries(testResults).map(([test, result]) => (
@@ -167,12 +176,12 @@ const StreamDiagnostics = ({ streamUrl }) => {
               fontSize: '10px'
             }}
           >
-            <strong>建议:</strong>
+            <strong>Suggestions:</strong>
             <br />
-            • 确保摄像头服务运行在 192.168.0.92:5000
+            • Ensure camera service is running on 192.168.0.92:5000
             <br />
-            • 检查防火墙设置
-            <br />• 验证设备在同一网络
+            • Check firewall settings
+            <br />• Verify devices are on the same network
           </div>
         </div>
       )}
